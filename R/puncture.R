@@ -1,6 +1,6 @@
 puncture <- function(dat,
-                     k = 5,
                      b = 5,
+                     m = 5,
                      mpat = function(mdat){
                        # This function creates a missingness pattern matrix
                        # based on random draws.
@@ -28,10 +28,10 @@ puncture <- function(dat,
 
 
   ## Check k and b are positive integers
-  stopifnot("'k' must be a single positive integer." =
-              is.numeric(k) & length(k) == 1 & k > 0 & k == as.integer(k))
   stopifnot("'b' must be a single positive integer." =
               is.numeric(b) & length(b) == 1 & b > 0 & b == as.integer(b))
+  stopifnot("'m' must be a single positive integer." =
+              is.numeric(m) & length(m) == 1 & m > 0 & m == as.integer(m))
 
   ## Check mpat is a function
   stopifnot("'mpat' must be a function that takes 'mdat' as input and returns a missingness pattern matrix."=
@@ -53,11 +53,11 @@ puncture <- function(dat,
               is.character(statistics) & length(statistics) >= 1)
 
   # Pre-allocate result storage
-  results <- data.frame(matrix(NA, nrow = k, ncol = length(statistics)))
+  results <- data.frame(matrix(NA, nrow = b, ncol = length(statistics)))
   colnames(results) <- statistics
 
   # Main loop
-  for (i in seq_len(k)) {
+  for (i in seq_len(b)) {
     # 1) Create missing data pattern
     temp_pattern <- mpat(dat)
 
@@ -66,7 +66,7 @@ puncture <- function(dat,
     miss_dat[temp_pattern == 0] <- NA
 
     # 3) Perform multiple imputation
-    midat <- mice::mice(miss_dat, m = b, printFlag = FALSE, ...)
+    midat <- mice::mice(miss_dat, m = m, printFlag = FALSE, ...)
 
     # 4) Fit model to each imputed dataset, then pool results
     mimod <- with(midat, func((stats::as.formula(form))))

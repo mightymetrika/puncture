@@ -13,8 +13,8 @@
 #       epsilon <- stats::rnorm(n, 0, abs(X1))
 #       list(X1 = X1, X2 = X2, epsilon = epsilon)
 #     },
-#     k = 5,
 #     b = 5,
+#     m = 5,
 #     remove.collinear=FALSE,
 #     combine = stats::median
 #   )
