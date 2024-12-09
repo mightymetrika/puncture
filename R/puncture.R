@@ -1,3 +1,55 @@
+#' Perform a Puncture Analysis
+#'
+#' @description
+#' Implements a bootstrap-based analysis method that combines multiple imputation
+#' for missing data. For each bootstrap iteration, the function creates a
+#' missingness pattern ("punctures" the data), applies multiple imputation, fits a
+#' specified model, and pools results across imputations.
+#'
+#' @param dat A data frame or matrix containing the complete dataset before introducing
+#'   missing values. Must have at least 2 rows and 1 column.
+#' @param b A positive integer specifying the number of bootstrap iterations to perform.
+#'   Default is 5.
+#' @param m A positive integer specifying the number of multiple imputations to generate
+#'   for each bootstrap sample. Default is 5.
+#' @param mpat A function that takes a dataset as input and returns a matrix of the same
+#'   dimensions with 1's indicating observed values and 0's indicating missing values.
+#'   The default function implements a simple random missingness pattern based on
+#'   independent Bernoulli trials.
+#' @param form A character string specifying the model formula (e.g., "y ~ x").
+#' @param func A function to fit the model, such as \code{stats::lm} or \code{stats::glm}.
+#'   Default is \code{stats::lm}.
+#' @param term A character string specifying the predictor term of interest in the model
+#'   for which statistics should be extracted.
+#' @param statistics A character vector specifying which statistics to extract for the
+#'   term of interest. The \code{broom::tidy()} names are used for statistics. Default
+#'   is c("estimate", "std.error", "statistic", "p.value").
+#' @param ... Additional arguments passed to \code{mice::mice()}.
+#'
+#' @return A data frame with \code{b} rows and columns corresponding to the requested
+#'   statistics. Each row represents results from one bootstrap iteration after
+#'   multiple imputation and pooling.
+#'
+#' @details
+#' The function implements the following algorithm for each bootstrap iteration:
+#' \enumerate{
+#'   \item Generate a missingness pattern using the specified \code{mpat} function
+#'   \item Apply the pattern to create a dataset with missing values
+#'   \item Perform multiple imputation using \code{mice}
+#'   \item Fit the specified model to each imputed dataset
+#'   \item Pool results across imputations using Rubin's rules
+#'   \item Extract the requested statistics for the term of interest
+#' }
+#'
+#' @note
+#' The default missingness pattern function creates missing values through two
+#' independent Bernoulli trials with success probabilities 0.7 and 0.6. A value
+#' is observed (1 in the pattern matrix) only if both trials are successful.
+#'
+#' @examples
+#' puncture(cars, b = 3, m = 3, form = "speed ~ dist", term = "dist")
+#'
+#' @export
 puncture <- function(dat,
                      b = 5,
                      m = 5,
