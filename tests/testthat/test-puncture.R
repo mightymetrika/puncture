@@ -3,6 +3,6 @@ test_that("puncture works", {
   names(df) <- c("y", "x")
   res <- puncture(df, k = 4)
   expect_equal(nrow(res), 4)
-  expect_equal(ncol(res), 3)
+  expect_equal(ncol(res), 4)
 
 })

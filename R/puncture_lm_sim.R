@@ -96,7 +96,8 @@ puncture_lm_sim <- function(n = 100,            # Sample size
     )
 
     beta1_hat_punct <- combine(puncture_results$estimate, na.rm = TRUE)
-    beta1_se_punct <- stats::sd(puncture_results$estimate, na.rm = TRUE)
+    # beta1_se_punct <- stats::sd(puncture_results$estimate, na.rm = TRUE)
+    beta1_se_punct <- combine(puncture_results$std.error, na.rm = TRUE)
     beta1_pvalue_punct <- combine(puncture_results$p.value, na.rm = TRUE)
 
     results$puncture$beta1_estimates[sim] <- beta1_hat_punct
