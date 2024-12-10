@@ -34,7 +34,7 @@ This is how pucnture() works with the ‘cars’ dataset.
 ``` r
 library(puncture)
 
-set.seed(1913)
+# First use stats::lm() as a reference model
 summary(stats::lm(speed ~ dist, cars))
 #> 
 #> Call:
@@ -54,6 +54,9 @@ summary(stats::lm(speed ~ dist, cars))
 #> Residual standard error: 3.156 on 48 degrees of freedom
 #> Multiple R-squared:  0.6511, Adjusted R-squared:  0.6438 
 #> F-statistic: 89.57 on 1 and 48 DF,  p-value: 1.49e-12
+
+# Now run puncture() as comparison model
+set.seed(1913)
 pcars <- puncture(cars,
                   b = 10,
                   m = 5,

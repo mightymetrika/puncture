@@ -43,8 +43,11 @@ This is how pucnture() works with the 'cars' dataset.
 ```{r example}
 library(puncture)
 
-set.seed(1913)
+# First use stats::lm() as a reference model
 summary(stats::lm(speed ~ dist, cars))
+
+# Now run puncture() as comparison model
+set.seed(1913)
 pcars <- puncture(cars,
                   b = 10,
                   m = 5,
