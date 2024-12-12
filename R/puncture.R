@@ -47,7 +47,8 @@
 #' is observed (1 in the pattern matrix) only if both trials are successful.
 #'
 #' @examples
-#' puncture(cars, b = 3, m = 3, form = "speed ~ dist", term = "dist")
+#' puncture(cars, b = 3, m = 3, form = "speed ~ dist", term = "dist",
+#'          remove.collinear=FALSE)
 #'
 #' @export
 puncture <- function(dat,

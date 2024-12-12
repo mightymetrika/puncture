@@ -1,7 +1,7 @@
 test_that("puncture_lm_sim works", {
   sim_results <- puncture_lm_sim(
     n = 100,
-    sim_iter = 3,
+    sim_iter = 2,
     beta_gen = function() {
       list(1,             # beta0 (intercept)
            1,             # beta1
@@ -13,7 +13,7 @@ test_that("puncture_lm_sim works", {
       epsilon <- stats::rnorm(n, 0, abs(X1))
       list(X1 = X1, X2 = X2, epsilon = epsilon)
     },
-    b = 3,
+    b = 5,
     m = 3,
     remove.collinear=FALSE,
     combine = mean

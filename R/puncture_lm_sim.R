@@ -35,7 +35,6 @@
 #'       \item beta1_CI_low: Lower confidence interval bounds
 #'       \item beta1_CI_high: Upper confidence interval bounds
 #'       \item beta1_coverage: Indicator for CI coverage of true parameter
-#'       \item beta1_pvalue: P-values for hypothesis tests
 #'       \item beta1_rejected: Indicator for null hypothesis rejection
 #'       \item converged: Convergence indicators
 #'     }
@@ -78,7 +77,7 @@
 #'   epsilon <- stats::rnorm(n, 0, abs(X1))
 #'   list(X1 = X1, X2 = X2, epsilon = epsilon)
 #' },
-#' m = 3, b = 3) |> suppressWarnings()
+#' m = 3, b = 3, remove.collinear=FALSE) |> suppressWarnings()
 #'
 #' @export
 puncture_lm_sim <- function(n = 100,            # Sample size
@@ -127,7 +126,6 @@ puncture_lm_sim <- function(n = 100,            # Sample size
       beta1_CI_low = numeric(sim_iter),
       beta1_CI_high = numeric(sim_iter),
       beta1_coverage = numeric(sim_iter),
-      beta1_pvalue = numeric(sim_iter),
       beta1_rejected = numeric(sim_iter),
       converged = numeric(sim_iter)
     ),
@@ -138,7 +136,6 @@ puncture_lm_sim <- function(n = 100,            # Sample size
       beta1_CI_low = numeric(sim_iter),
       beta1_CI_high = numeric(sim_iter),
       beta1_coverage = numeric(sim_iter),
-      beta1_pvalue = numeric(sim_iter),
       beta1_rejected = numeric(sim_iter),
       converged = numeric(sim_iter)
     )
@@ -183,21 +180,26 @@ puncture_lm_sim <- function(n = 100,            # Sample size
 
     # Standard analysis
     standard_model <- stats::lm(stats::as.formula(.formula), data = data)
+    standard_tidy <- broom::tidy(standard_model, conf.int = TRUE, conf.level = 1 - alpha)
     standard_summary <- summary(standard_model)
     beta1_hat_std <- stats::coef(standard_model)[predictor_vars[1]]
     beta1_se_std <- sqrt(diag(stats::vcov(standard_model)))[[predictor_vars[1]]]
-    beta1_pvalue_std <- standard_summary$coefficients[predictor_vars[1], "Pr(>|t|)"]
+    beta1_cilow_std <- standard_tidy[standard_tidy$term == predictor_vars[1],
+                                     "conf.low", drop = FALSE] |> as.numeric()
+    beta1_cihi_std <- standard_tidy[standard_tidy$term == predictor_vars[1],
+                                    "conf.high", drop = FALSE] |> as.numeric()
 
     results$standard$beta1_estimates[sim] <- beta1_hat_std
     results$standard$beta1_SE[sim] <- beta1_se_std
     results$standard$beta1_bias[sim] <- beta1_hat_std - betas[[2]]
-    results$standard$beta1_CI_low[sim] <- beta1_hat_std - stats::qnorm(1 - alpha/2) * beta1_se_std
-    results$standard$beta1_CI_high[sim] <- beta1_hat_std + stats::qnorm(1 - alpha/2) * beta1_se_std
-    results$standard$beta1_coverage[sim] <-
-      (results$standard$beta1_CI_low[sim] <= betas[[2]]) &&
-      (results$standard$beta1_CI_high[sim] >= betas[[2]])
-    results$standard$beta1_pvalue[sim] <- beta1_pvalue_std
-    results$standard$beta1_rejected[sim] <- beta1_pvalue_std < alpha
+    results$standard$beta1_CI_low[sim] <- beta1_cilow_std
+    results$standard$beta1_CI_high[sim] <- beta1_cihi_std
+    results$standard$beta1_coverage[sim] <- (beta1_cilow_std <= betas[[2]]) &&
+      (beta1_cihi_std >= betas[[2]])
+    results$standard$beta1_rejected[sim] <- (beta1_cilow_std < 0 &&
+                                               beta1_cihi_std < 0) |
+      ((beta1_cilow_std > 0 &&
+          beta1_cihi_std > 0))
     results$standard$converged[sim] <- ifelse(!is.na(beta1_hat_std), 1, 0)
 
     # Puncture analysis
@@ -210,19 +212,23 @@ puncture_lm_sim <- function(n = 100,            # Sample size
     )
 
     beta1_hat_punct <- combine(puncture_results$estimate, na.rm = TRUE)
-    beta1_se_punct <- combine(puncture_results$std.error, na.rm = TRUE)
-    beta1_pvalue_punct <- combine(puncture_results$p.value, na.rm = TRUE)
+    beta1_se_punct <- stats::sd(puncture_results$estimate, na.rm = TRUE)
+    beta1_cilow_punct <- stats::quantile(puncture_results$estimate,
+                                         c((alpha) / 2),
+                                         na.rm = TRUE)
+    beta1_cihi_punct <- stats::quantile(puncture_results$estimate,
+                                        c(1 - (1 - alpha) / 2),
+                                        na.rm = TRUE)
 
     results$puncture$beta1_estimates[sim] <- beta1_hat_punct
     results$puncture$beta1_SE[sim] <- beta1_se_punct
     results$puncture$beta1_bias[sim] <- beta1_hat_punct - betas[[2]]
-    results$puncture$beta1_CI_low[sim] <- beta1_hat_punct - stats::qnorm(1 - alpha/2) * beta1_se_punct
-    results$puncture$beta1_CI_high[sim] <- beta1_hat_punct + stats::qnorm(1 - alpha/2) * beta1_se_punct
+    results$puncture$beta1_CI_low[sim] <- beta1_cilow_punct
+    results$puncture$beta1_CI_high[sim] <- beta1_cihi_punct
     results$puncture$beta1_coverage[sim] <-
-      (results$puncture$beta1_CI_low[sim] <= betas[[2]]) &&
-      (results$puncture$beta1_CI_high[sim] >= betas[[2]])
-    results$puncture$beta1_pvalue[sim] <- beta1_pvalue_punct
-    results$puncture$beta1_rejected[sim] <- beta1_pvalue_punct < alpha
+      (beta1_cilow_punct <= betas[[2]]) &&
+      (beta1_cihi_punct >= betas[[2]])
+    results$puncture$beta1_rejected[sim] <- (beta1_cilow_punct < 0 && beta1_cihi_punct < 0) | ((beta1_cilow_punct > 0 && beta1_cihi_punct > 0))
     results$puncture$converged[sim] <- mean(!is.na(puncture_results$estimate), na.rm = TRUE)
   }
 

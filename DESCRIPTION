@@ -1,10 +1,22 @@
 Package: puncture
-Title: What the Package Does (One Line, Title Case)
+Title: Use Missing Data Patterns to Generate Resamples
 Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Authors@R: c(
+    person("Mackson", "Ncube", , "macksonncube.stats@gmail.com", role = c("aut", "cre")),
+    person("mightymetrika, LLC", role = c("cph", "fnd"))
+  )
+Description: The bootstrap method and methods for handling missing data are used
+    often in data analysis to obtain valid inferences when the data violate
+    assumptions of a statistical model. The 'puncture' package implements an
+    algorithm where a missing data pattern is used to create samples of the
+    original dataset with added missing data (these samples are the punctured data).
+    Each punctured dataset is then processed using a missing data method (like
+    multiple imputation); finally, the results across punctured datasets are
+    combined using methods to combine bootstrap resamples. The puncture() function
+    provides a framework to implement a multiple imputation based version of the
+    algorithm. The puncture_lm_sim() function can be used to run linear regression
+    simulations comparing the simple bootstrap to the method implemented in
+    puncture().
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

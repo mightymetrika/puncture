@@ -55,7 +55,6 @@ A list containing two elements:
 \item beta1_CI_low: Lower confidence interval bounds
 \item beta1_CI_high: Upper confidence interval bounds
 \item beta1_coverage: Indicator for CI coverage of true parameter
-\item beta1_pvalue: P-values for hypothesis tests
 \item beta1_rejected: Indicator for null hypothesis rejection
 \item converged: Convergence indicators
 }
@@ -104,6 +103,6 @@ gen_ivs = function(n) {
   epsilon <- stats::rnorm(n, 0, abs(X1))
   list(X1 = X1, X2 = X2, epsilon = epsilon)
 },
-m = 3, b = 3) |> suppressWarnings()
+m = 3, b = 3, remove.collinear=FALSE) |> suppressWarnings()
 
 }
