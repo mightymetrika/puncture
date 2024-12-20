@@ -21,10 +21,12 @@ When the stacking parameter is set to an integer greater than 1, the
 algorithm is modified to create and combine multiple copies of the
 dataset before imputation:
 
-- For each of the specified number of stacks: -Generate and apply a
-  unique missingness pattern -Optionally thin the data by randomly
-  selecting rows (if thin \< 1) -Combine all resulting datasets -Proceed
-  with multiple imputation and subsequent steps as in the base algorithm
+- For each of the specified number of stacks:
+  - Generate and apply a unique missingness pattern
+  - Optionally thin the data by randomly selecting rows (if thin \< 1)
+- Combine all resulting datasets
+- Proceed with multiple imputation and subsequent steps as in the base
+  algorithm
 
 ## Installation
 
