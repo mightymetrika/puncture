@@ -7,7 +7,7 @@
 <!-- badges: end -->
 
 The goal of puncture is to implement a bootstrap-based analysis method.
-The method implements the following algorithm for each bootstrap
+The base method implements the following algorithm for each bootstrap
 iteration:
 
 - Generate a missingness pattern using the specified
@@ -16,6 +16,15 @@ iteration:
 - Fit the specified model to each imputed dataset
 - Pool results across imputations using Rubin’s rules
 - Extract the requested statistics for the term of interest
+
+When the stacking parameter is set to an integer greater than 1, the
+algorithm is modified to create and combine multiple copies of the
+dataset before imputation:
+
+- For each of the specified number of stacks: -Generate and apply a
+  unique missingness pattern -Optionally thin the data by randomly
+  selecting rows (if thin \< 1) -Combine all resulting datasets -Proceed
+  with multiple imputation and subsequent steps as in the base algorithm
 
 ## Installation
 
