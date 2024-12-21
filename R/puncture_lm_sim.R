@@ -159,8 +159,8 @@ puncture_lm_sim <- function(n = 100,            # Sample size
     response_var <- formula_vars[1]
     predictor_vars <- formula_vars[-1]
 
-    # Create data frame
-    data <- as.data.frame(ivs[predictor_vars])
+    # Create data frame with ALL variables (including auxiliary)
+    data <- as.data.frame(ivs[setdiff(names(ivs), "epsilon")])
 
     ## Check that the required predictor variables exist
     if (!all(predictor_vars %in% names(data))) {
