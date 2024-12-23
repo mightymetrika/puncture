@@ -1,7 +1,8 @@
 ## code to prepare `punc_pwr` dataset goes here
+system.time(
 punc_pwr <- puncture_lm_sim(
   n = 30,
-  sim_iter = 2000,
+  sim_iter = 1000,
   beta_gen = function() {
     list(0,             # beta0 (intercept)
          0.5,             # beta1
@@ -69,5 +70,5 @@ punc_pwr <- puncture_lm_sim(
   remove.collinear=FALSE,
   combine = mean
 )
-
+)
 usethis::use_data(punc_pwr, overwrite = TRUE)
