@@ -31,3 +31,15 @@
 #'   \item{Pwr}{Rejection rate}
 #' }
 "bb_type1"
+
+#' Puncture: Statistical Power
+#'
+#' Results from puncture with a 0.5 slope of interest.
+#'
+#' @format ## `punc_pwr`
+#' A list with two elements:
+#' \describe{
+#'   \item{results}{Full results from simulation}
+#'   \item{summary}{Summary of results from simulation}
+#' }
+"punc_pwr"

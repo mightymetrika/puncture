@@ -56,8 +56,8 @@ punc_pwr <- puncture_lm_sim(
       epsilon = epsilon
     ))
   },
-  b = 1000,
-  m = 40,
+  b = 100,
+  m = 10,
   stacks = 2,
   thin = c(1, 1/3),
   mpat = function(mdat){ # define missing data pattern
