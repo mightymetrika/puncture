@@ -43,3 +43,15 @@
 #'   \item{summary}{Summary of results from simulation}
 #' }
 "punc_pwr"
+
+#' Puncture: Type 1 Error
+#'
+#' Results from puncture type 1 error rate analysis
+#'
+#' @format ## `punc_type1`
+#' A list with two elements:
+#' \describe{
+#'   \item{results}{Full results from simulation}
+#'   \item{summary}{Summary of results from simulation}
+#' }
+"punc_type1"
