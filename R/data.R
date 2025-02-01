@@ -55,3 +55,15 @@
 #'   \item{summary}{Summary of results from simulation}
 #' }
 "punc_type1"
+
+#' Puncture: Statistical Power with Heteroskedasticity
+#'
+#' Results from puncture with a 0.5 slope of interest and heteroskedasticity.
+#'
+#' @format ## `punc_pwr_het`
+#' A list with two elements:
+#' \describe{
+#'   \item{results}{Full results from simulation}
+#'   \item{summary}{Summary of results from simulation}
+#' }
+"punc_pwr_het"

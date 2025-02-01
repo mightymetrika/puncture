@@ -1,7 +1,7 @@
 ## code to prepare `punc_pwr_het` dataset goes here
 punc_pwr_het <- puncture_lm_sim(
   n = 30,
-  sim_iter = 2000,
+  sim_iter = 1000,
   beta_gen = function() {
     list(0,             # beta0 (intercept)
          0.5,             # beta1
@@ -55,8 +55,8 @@ punc_pwr_het <- puncture_lm_sim(
       epsilon = epsilon
     ))
   },
-  b = 1000,
-  m = 40,
+  b = 100,
+  m = 10,
   stacks = 2,
   thin = c(1, 1/3),
   mpat = function(mdat){ # define missing data pattern
