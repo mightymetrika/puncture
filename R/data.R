@@ -67,3 +67,15 @@
 #'   \item{summary}{Summary of results from simulation}
 #' }
 "punc_pwr_het"
+
+#' Puncture: Type 1 Error with Heteroskedasticity
+#'
+#' Results from puncture type 1 error rate analysis with heteroskedasticity.
+#'
+#' @format ## `punc_type1_het`
+#' A list with two elements:
+#' \describe{
+#'   \item{results}{Full results from simulation}
+#'   \item{summary}{Summary of results from simulation}
+#' }
+"punc_type1_het"
