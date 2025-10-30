@@ -1,5 +1,5 @@
-## code to prepare `punc_type1_2` dataset goes here
-punc_type1_2 <- puncture_lm_sim(
+## code to prepare `punc_type1_2het` dataset goes here
+punc_type1_2het <- puncture_lm_sim(
   n = 20,                   # Smaller sample size (was 30)
   sim_iter = 1000,          # Keep the same number of simulation iterations
   beta_gen = function() {
@@ -43,7 +43,7 @@ punc_type1_2 <- puncture_lm_sim(
     X5 <- bndat[,5]  # auxiliary variable
 
     # Generate error term
-    epsilon <- stats::rnorm(n, 0, 10)
+    epsilon <- stats::rnorm(n, 0, (abs(X1) + abs(X4))/2)
 
     # Return all variables
     return(list(
@@ -57,8 +57,9 @@ punc_type1_2 <- puncture_lm_sim(
   },
   b = 100,
   m = 10,
-  stacks = 6,
-  thin = c(1, 0.1, 0.1, 0.1, 0.1, 0.1),   # Different thinning strategy
+  # stacks = 6,
+  stacks = 10,
+  thin = c(1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1),   # Different thinning strategy
   mpat = function(mdat){    # Adjusted missingness pattern
     n <- nrow(mdat) * ncol(mdat)
     # Higher probability of missingness (lower observation probabilities)
@@ -71,4 +72,5 @@ punc_type1_2 <- puncture_lm_sim(
   combine = mean
 )
 
-usethis::use_data(punc_type1_2, overwrite = TRUE)
+
+usethis::use_data(punc_type1_2het, overwrite = TRUE)
