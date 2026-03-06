@@ -58,8 +58,6 @@ system.time(
     },
     b = 100,
     m = 10,
-    stacks = 1,
-    thin = 1,
     mpat = function(mdat){ # define missing data pattern
       n <- nrow(mdat) * ncol(mdat)
       c1 <- stats::rbinom(n, 1, 0.77)
